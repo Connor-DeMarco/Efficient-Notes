@@ -30,7 +30,17 @@ function copyAll() {
     s += "</li>";
   }
   s += "\n</ul>"
-  navigator.clipboard.writeText(s);
+
+  // Add the s string to the clipboard as rtf
+  function listener(e) {
+    e.clipboardData.setData("text/html", s);
+    e.clipboardData.setData("text/plain", s);
+    e.preventDefault();
+  }
+
+  document.addEventListener("copy", listener);
+  document.execCommand("copy");
+  document.removeEventListener("copy", listener);
 }
 
 // Recieves messages from background, and calls the appropriate function
