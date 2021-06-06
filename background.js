@@ -26,34 +26,26 @@ browser.menus.create({
 
 browser.menus.create({
   id: "highlight-color-1",
-  type: "radio",
   title: "Yellow",
   contexts: ["all"],
-  checked: true
 });
 
 browser.menus.create({
   id: "highlight-color-2",
-  type: "radio",
   title: "Red",
   contexts: ["all"],
-  checked: false
 });
 
 browser.menus.create({
   id: "highlight-color-3",
-  type: "radio",
   title: "Green",
   contexts: ["all"],
-  checked: false
 });
 
 browser.menus.create({
   id: "highlight-color-4",
-  type: "radio",
   title: "Blue",
   contexts: ["all"],
-  checked: false
 });
 
 browser.menus.create({
@@ -80,15 +72,19 @@ browser.menus.onClicked.addListener((info, tab) => {
       break;
     case "highlight-color-1":
       currentColor = color1;
+      browser.tabs.sendMessage(tab.id, { command: "highlight", data: currentColor });
       break;
     case "highlight-color-2":
       currentColor = color2;
+      browser.tabs.sendMessage(tab.id, { command: "highlight", data: currentColor });
       break;
     case "highlight-color-3":
       currentColor = color3;
+      browser.tabs.sendMessage(tab.id, { command: "highlight", data: currentColor });
       break;
     case "highlight-color-4":
       currentColor = color4;
+      browser.tabs.sendMessage(tab.id, { command: "highlight", data: currentColor });
       break;
     case "toggle-sidebar":
       console.log("Toggling sidebar");

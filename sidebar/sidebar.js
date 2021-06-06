@@ -8,6 +8,29 @@ function saveContent() {
     let contentToStore = {};
     contentToStore[tabs[0].url] = contentBox.innerText;
     browser.storage.local.set(contentToStore);
+
+    const spans = browser.storage.local.get(contentToStore);
+    var s = "<h2>" + tabs[0].url + "</h2>";
+    s += "\n<ul>"
+    // for (var i = 0; i < spans.length; i++) {
+    //   s += "\n\t";
+    //   s += "<li>";
+    //   s += spans[i].textContent.trim();
+    //   s += "</li>";
+    // }
+    s += contentBox.innerHTML;
+    s += "\n</ul>";
+
+    // Add the s string to the clipboard as rtf
+    function listener(e) {
+      e.clipboardData.setData("text/html", s);
+      e.clipboardData.setData("text/plain", s);
+      e.preventDefault();
+    }
+
+    document.addEventListener("copy", listener);
+    document.execCommand("copy");
+    document.removeEventListener("copy", listener);
   });
 }
 
