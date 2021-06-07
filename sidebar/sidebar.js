@@ -43,6 +43,27 @@ function appendText(request) {
   saveContent();
 }
 
+document.getElementById("copy_button").onclick = function() {saveText()};
+function saveText() {
+
+
+  var s = "<h2>" + window.location.toString() + "</h2>";
+  s += "\n<ul>"
+  s += contentBox.textContent;
+  s += "\n</ul>"
+  
+  // Add the s string to the clipboard as rtf
+  function listener(e) {
+    e.clipboardData.setData("text/html", s);
+    e.clipboardData.setData("text/plain", s);
+    e.preventDefault();
+  }
+
+  document.addEventListener("copy", listener);
+  document.execCommand("copy");
+  document.removeEventListener("copy", listener);
+}
+
 // Append message to content box when received
 browser.runtime.onMessage.addListener(appendText);
 
