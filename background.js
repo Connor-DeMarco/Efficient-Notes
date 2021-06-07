@@ -73,10 +73,10 @@ browser.menus.create({
 browser.menus.onClicked.addListener((info, tab) => {
   switch (info.menuItemId) {
     case "get-text":
-      browser.tabs.sendMessage(tab.id, {command: "copy"});
+      browser.tabs.sendMessage(tab.id, { command: "copy" });
       break;
     case "highlight-selection":
-      browser.tabs.sendMessage(tab.id, {command: "highlight", data: currentColor});
+      browser.tabs.sendMessage(tab.id, { command: "highlight", data: currentColor });
       break;
     case "highlight-color-1":
       currentColor = color1;
@@ -96,21 +96,20 @@ browser.menus.onClicked.addListener((info, tab) => {
   }
 });
 
-// This recieves data from the sidebar, it seems as if there's no way for the sidebar and content scripts to communicate directly
-// should work fine since there's only one type of message to handle
+// Recieves data from the sidebar and forwards it to the content script
 function handleMessage(request, _sender, _sendResponse) {
   // First split the incoming string into the tab id and the rest of the information
   var splitted = request.nodeInfo.split("{}");
 
   // The rest of the string is just the innerHTML of the content box, so we need to split this up line by line to highlight the correct parts
-  // ideally this should be based off of something besides \n as that is a relatively common character
+  // Ideally this should be based off of something besides \n as that is a relatively common character
   var split2 = splitted[1].split("\n");
   for (var i = 0; i < split2.length - 1; i++) {
     // Sometimes there are strings of length 0 due to extra newline characters so just ignore these
     if (split2[i].length != 0) {
       // Once more split this string up to just the hidden part, which contains information about the nodes that the selection was done in
       var newStr = split2[i].split("</div>")[0].substring(27);
-      // Some garbage was getting printed out due to undefined data so ignore this stuff
+      // Some garbage might get printed out in the case of undefined data, so ignore it
       if (newStr != "" && newStr != "undefined") {
         // Send the message to the content script
         browser.tabs.sendMessage(parseInt(splitted[0]), { command: "highlightRefresh", data: newStr });
