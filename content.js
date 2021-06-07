@@ -29,17 +29,17 @@ function onGot(item) {
   const spans = item[window.location.toString()];
   const lines = spans.split(/\r\n|\n\r|\n|\r/);
   var s = "<h2>" + window.location.toString() + "</h2>";
-  s += "\n<ul>"
+  s += "\n<ul>";
   for (var i = 0; i < lines.length; i++) {
     let line = lines[i].trim();
-    if (line.length != 0) {
+    if (line != "") {
       s += "\n\t";
       s += "<li>";
       s += line;
       s += "</li>";
     }
   }
-  s += "\n</ul>"
+  s += "\n</ul>";
 
   // Add the s string to the clipboard as rtf
   function listener(e) {
