@@ -49,7 +49,7 @@ function highlightSelection(string) {
   var message = str1 + "[]" + str2 + "[]" + offset1 + "[]" + offset2 + "[]" + string + "[]" + wrapper.textContent.trim() + "\n";
 
   // Send text/node content to sidebar
-  browser.runtime.sendMessage({message: message});
+  browser.runtime.sendMessage({ message: message });
 }
 
 function highlightRefresh(string) {
@@ -115,6 +115,9 @@ function highlightRefresh(string) {
     if (colorString == "#0000FF") {
       wrapper1.style.color = "#ffffff";
     }
+
+    // Restore highlight class for copying functionality
+    wrapper1.classList.add("notes-highlight");
   }
 }
 
@@ -124,10 +127,29 @@ function copyAll() {
   var s = "<h2>" + window.location.toString() + "</h2>";
   s += "\n<ul>"
   for (var i = 0; i < spans.length; i++) {
+    // Check which color the highlighted text is, and apply a hardcoded formatting
     s += "\n\t";
+    if (spans[i].style.backgroundColor == "rgb(255, 0, 0)") {
+      s += "<ul>"
+    }
+    if (spans[i].style.backgroundColor == "rgb(0, 255, 0)") {
+      s += "<ul><ul>"
+    }
+    if (spans[i].style.backgroundColor == "rgb(0, 0, 255)") {
+      s += "<ul><ul><ul>"
+    }
     s += "<li>";
     s += spans[i].textContent.trim();
     s += "</li>";
+    if (spans[i].style.backgroundColor == "rgb(255, 0, 0)") {
+      s += "</ul>"
+    }
+    if (spans[i].style.backgroundColor == "rgb(0, 255, 0)") {
+      s += "</ul></ul>"
+    }
+    if (spans[i].style.backgroundColor == "rgb(0, 0, 255)") {
+      s += "</ul></ul></ul>"
+    }
   }
   s += "\n</ul>"
 
